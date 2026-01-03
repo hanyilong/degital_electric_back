@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.ThingModelMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.ThingModel">
+    <id column="id" property="id" />
+    <result column="model_name" property="modelName" />
+    <result column="model_description" property="modelDescription" />
+    <result column="model_type" property="modelType" />
+    <result column="attributes" property="attributes" />
+    <result column="functions" property="functions" />
+    <result column="events" property="events" />
+    <result column="project_id" property="projectId" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM thing_model
+    <where>
+      <if test="projectId != null">
+        AND project_id = #{projectId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByProjectId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM thing_model WHERE project_id = #{projectId}
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM thing_model WHERE id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="com.device.manage.entity.ThingModel">
+    INSERT INTO thing_model (
+      model_name, model_description, model_type,
+      attributes, functions, events, project_id, create_time, update_time
+    ) VALUES (
+      #{modelName}, #{modelDescription}, #{modelType},
+      #{attributes}, #{functions}, #{events}, #{projectId}, NOW(), NOW()
+    )
+  </insert>
+
+  <update id="update" parameterType="com.device.manage.entity.ThingModel">
+    UPDATE thing_model SET
+      model_name = #{modelName},
+      model_description = #{modelDescription},
+      model_type = #{modelType},
+      attributes = #{attributes},
+      functions = #{functions},
+      events = #{events},
+      project_id = #{projectId},
+      update_time = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    DELETE FROM thing_model WHERE id = #{id}
+  </delete>
+</mapper>

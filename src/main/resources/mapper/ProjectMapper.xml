@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.Project">
+    <id column="id" property="id"/>
+    <result column="project_name" property="projectName"/>
+    <result column="project_code" property="projectCode"/>
+    <result column="project_description" property="projectDescription"/>
+    <result column="create_time" property="createTime"/>
+    <result column="update_time" property="updateTime"/>
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap"><![CDATA[SELECT * FROM project]]></select>
+  <select id="selectById" parameterType="long" resultMap="BaseResultMap"><![CDATA[SELECT * FROM project WHERE id = #{id}]]></select>
+  <select id="selectByProjectCode" parameterType="string" resultMap="BaseResultMap"><![CDATA[SELECT * FROM project WHERE project_code = #{projectCode}]]></select>
+  <insert id="insert" parameterType="com.device.manage.entity.Project"><![CDATA[INSERT INTO project (project_name, project_code, project_description, create_time, update_time) VALUES (#{projectName}, #{projectCode}, #{projectDescription}, NOW(), NOW())]]></insert>
+  <update id="update" parameterType="com.device.manage.entity.Project"><![CDATA[UPDATE project SET project_name = #{projectName}, project_code = #{projectCode}, project_description = #{projectDescription}, update_time = NOW() WHERE id = #{id}]]></update>
+  <delete id="deleteById" parameterType="long"><![CDATA[DELETE FROM project WHERE id = #{id}]]></delete>
+</mapper>

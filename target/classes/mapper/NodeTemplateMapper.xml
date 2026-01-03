@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.NodeTemplateMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.NodeTemplate">
+    <id column="id" property="id" />
+    <result column="shape" property="shape" />
+    <result column="label" property="label" />
+    <result column="svgTemplate" property="svgTemplate" />
+    <result column="imageDefault" property="imageDefault" />
+    <result column="imageStart" property="imageStart" />
+    <result column="imageStop" property="imageStop" />
+    <result column="svgDefaultStyle" property="svgDefaultStyle" />
+    <result column="svgStartStyle" property="svgStartStyle" />
+    <result column="svgStopStyle" property="svgStopStyle" />
+    <result column="folderName" property="folderName" />
+    <result column="imageIcon" property="imageIcon" />
+    <result column="systemComponent" property="systemComponent" />
+    <result column="systemComponentProps" property="systemComponentProps" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM node_template
+  </select>
+
+  <select id="selectByFolder" resultMap="BaseResultMap">
+    SELECT * FROM node_template
+        <where>
+          <if test="folderName != null">
+            folderName = #{folderName}
+          </if>
+        </where>
+  </select>
+
+  <select id="selectByProjectId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM node_template WHERE project_id = #{projectId}
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM node_template WHERE id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="com.device.manage.entity.NodeTemplate">
+    INSERT INTO node_template (
+      shape, label, svgTemplate, imageDefault, imageStop, imageStart, svgDefaultStyle, svgStartStyle, svgStopStyle, folderName, imageIcon, systemComponent, systemComponentProps
+    ) VALUES (
+      #{shape}, #{label}, #{svgTemplate}, #{imageDefault}, #{imageStop}, #{imageStart}, #{svgDefaultStyle}, #{svgStartStyle}, #{svgStopStyle}, #{folderName}, #{imageIcon}, #{systemComponent}, #{systemComponentProps}
+    )
+  </insert>
+
+  <update id="update" parameterType="com.device.manage.entity.NodeTemplate">
+    UPDATE node_template SET
+      shape = #{shape},
+      label = #{label},
+      folderName = #{folderName},
+      imageIcon = #{imageIcon},
+
+
+      imageDefault = #{imageDefault},
+      imageStop = #{imageStop},
+      imageStart = #{imageStart},
+
+      svgTemplate = #{svgTemplate},
+      svgDefaultStyle = #{svgDefaultStyle},
+      svgStartStyle = #{svgStartStyle},
+      svgStopStyle = #{svgStopStyle},
+
+      systemComponent = #{systemComponent},
+      systemComponentProps = #{systemComponentProps}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    DELETE FROM node_template WHERE id = #{id}
+  </delete>
+</mapper>

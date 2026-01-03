@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.ProjectMenuMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.ProjectMenu">
+    <id column="id" property="id"/>
+    <result column="project_id" property="projectId"/>
+    <result column="menu_id" property="menuId"/>
+  </resultMap>
+  
+  <select id="selectMenuIdsByProjectId" parameterType="long" resultType="long">
+    <![CDATA[
+      SELECT menu_id FROM project_menu WHERE project_id = #{projectId}
+    ]]>
+  </select>
+  
+  <select id="selectByProjectId" parameterType="long" resultMap="BaseResultMap">
+    <![CDATA[
+      SELECT * FROM project_menu WHERE project_id = #{projectId}
+    ]]>
+  </select>
+  
+  <select id="selectByMenuId" parameterType="long" resultMap="BaseResultMap">
+    <![CDATA[
+      SELECT * FROM project_menu WHERE menu_id = #{menuId}
+    ]]>
+  </select>
+  
+  <insert id="insert" parameterType="com.device.manage.entity.ProjectMenu">
+    <![CDATA[
+      INSERT INTO project_menu (project_id, menu_id)
+      VALUES (#{projectId}, #{menuId})
+    ]]>
+  </insert>
+  
+  <delete id="delete">
+    <![CDATA[
+      DELETE FROM project_menu WHERE project_id = #{projectId} AND menu_id = #{menuId}
+    ]]>
+  </delete>
+  
+  <delete id="deleteByProjectId" parameterType="long">
+    <![CDATA[
+      DELETE FROM project_menu WHERE project_id = #{projectId}
+    ]]>
+  </delete>
+  
+  <delete id="deleteByMenuId" parameterType="long">
+    <![CDATA[
+      DELETE FROM project_menu WHERE menu_id = #{menuId}
+    ]]>
+  </delete>
+</mapper>

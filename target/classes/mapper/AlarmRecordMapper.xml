@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.AlarmRecordMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.AlarmRecord">
+    <id column="id" property="id"/>
+    <result column="alarm_rule_id" property="ruleId"/>
+    <result column="device_code" property="deviceCode"/>
+    <result column="device_name" property="deviceName"/>
+    <result column="project_id" property="projectId"/>
+    <result column="alarm_time" property="alarmTime"/>
+    <result column="alarm_level" property="alarmLevel"/>
+    <result column="alarm_message" property="alarmMessage"/>
+    <result column="alarm_value" property="alarmValue"/>
+    <result column="status" property="status"/>
+    <result column="resolve_time" property="resolveTime"/>
+    <result column="create_time" property="createTime"/>
+    <result column="update_time" property="updateTime"/>
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record]]></select>
+  <select id="selectById" parameterType="long" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE id = #{id}]]></select>
+  <select id="selectBydeviceCode" parameterType="string" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE device_code = #{deviceCode}]]></select>
+  <select id="selectByRuleId" parameterType="long" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE alarm_rule_id = #{ruleId}]]></select>
+  <select id="selectByStatus" parameterType="string" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE status = #{status}]]></select>
+  <select id="selectByProjectId" parameterType="long" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE project_id = #{projectId}]]></select>
+  <select id="selectBydeviceCodeAndProjectId" parameterType="map" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE device_code = #{deviceCode} AND project_id = #{projectId}]]></select>
+  <select id="selectByRuleIdAndProjectId" parameterType="map" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE alarm_rule_id = #{ruleId} AND project_id = #{projectId}]]></select>
+  <select id="selectByStatusAndProjectId" parameterType="map" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE status = #{status} AND project_id = #{projectId}]]></select>
+  <select id="selectByConditions" parameterType="map" resultMap="BaseResultMap">
+    <![CDATA[SELECT a.*, d.device_name FROM alarm_record a LEFT JOIN device d ON a.device_code = d.device_code WHERE 1=1]]>
+    <if test="projectId != null">
+      <![CDATA[ AND a.project_id = #{projectId}]]>
+    </if>
+    <if test="modelId != null and modelId != ''">
+      <![CDATA[ AND d.model_id = #{modelId}]]>
+    </if>
+    <if test="deviceCode != null and deviceCode != ''">
+      <![CDATA[ AND a.device_code = #{deviceCode}]]>
+    </if>
+    <if test="ruleId != null">
+      <![CDATA[ AND a.alarm_rule_id = #{ruleId}]]>
+    </if>
+    <if test="alarmLevel != null and alarmLevel != ''">
+      <![CDATA[ AND a.alarm_level = #{alarmLevel}]]>
+    </if>
+    <if test="status != null and status != ''">
+      <![CDATA[ AND a.status = #{status}]]>
+    </if>
+    <if test="startTime != null">
+      <![CDATA[ AND a.alarm_time >= #{startTime}]]>
+    </if>
+    <if test="endTime != null">
+      <![CDATA[ AND a.alarm_time <= #{endTime}]]>
+    </if>
+    <![CDATA[ ORDER BY a.alarm_time DESC]]>
+  </select>
+  <insert id="insert" parameterType="com.device.manage.entity.AlarmRecord"><![CDATA[INSERT INTO alarm_record (alarm_rule_id, device_code, project_id, alarm_time, alarm_level, alarm_message, alarm_value, status, resolve_time, create_time, update_time) VALUES (#{ruleId}, #{deviceCode}, #{projectId}, #{alarmTime}, #{alarmLevel}, #{alarmMessage}, #{alarmValue}, #{status}, #{resolveTime}, NOW(),  NOW())]]></insert>
+  <update id="updateStatus"><![CDATA[UPDATE alarm_record SET status = #{status}, resolve_time = #{resolveTime} WHERE id = #{id}]]></update>
+  <delete id="deleteById" parameterType="long"><![CDATA[DELETE FROM alarm_record WHERE id = #{id}]]></delete>
+</mapper>

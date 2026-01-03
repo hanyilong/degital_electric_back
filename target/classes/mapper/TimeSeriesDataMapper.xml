@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.TimeSeriesDataMapper">
+
+    <resultMap id="TimeSeriesDataResultMap" type="com.device.manage.entity.TimeSeriesData">
+        <id property="id" column="id"/>
+        <result property="deviceCode" column="device_code"/>
+        <result property="pointName" column="point_name"/>
+        <result property="pointValue" column="point_value"/>
+        <result property="recordTime" column="record_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="selectByDeviceCode" resultMap="TimeSeriesDataResultMap">
+        SELECT * FROM time_series_data
+        WHERE device_code = #{deviceCode}
+        ORDER BY record_time DESC
+        LIMIT 100
+    </select>
+
+    <select id="selectByDeviceCodeAndPointName" resultMap="TimeSeriesDataResultMap">
+        SELECT * FROM time_series_data
+        WHERE device_code = #{deviceCode}
+          AND point_name = #{pointName}
+        ORDER BY record_time DESC
+        LIMIT 100
+    </select>
+
+    <select id="selectByDeviceCodeAndTimeRange" resultMap="TimeSeriesDataResultMap">
+        SELECT * FROM time_series_data
+        WHERE device_code = #{deviceCode}
+          AND record_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY record_time ASC
+    </select>
+
+    <select id="selectByDeviceCodePointNameAndTimeRange" resultMap="TimeSeriesDataResultMap">
+        SELECT * FROM time_series_data
+        WHERE device_code = #{deviceCode}
+          AND point_name = #{pointName}
+          AND record_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY record_time ASC
+    </select>
+
+    <insert id="insert" parameterType="com.device.manage.entity.TimeSeriesData">
+        INSERT INTO time_series_data (device_code, point_name, point_value, record_time, create_time)
+        VALUES (#{deviceCode}, #{pointName}, #{pointValue}, #{recordTime}, #{createTime})
+    </insert>
+
+    <select id="selectPointNamesByDeviceCode" resultType="java.lang.String">
+        SELECT DISTINCT point_name FROM time_series_data
+        WHERE device_code = #{deviceCode}
+        ORDER BY point_name
+    </select>
+    
+    <select id="sqlQuery" resultType="java.util.Map">
+        ${sql}
+    </select>
+
+</mapper>

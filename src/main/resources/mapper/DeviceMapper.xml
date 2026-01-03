@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.DeviceMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.Device">
+    <id column="id" property="id" />
+    <result column="device_name" property="deviceName" />
+    <result column="device_code" property="deviceCode" />
+    <result column="device_model" property="deviceType" />
+    <result column="device_type" property="deviceType" />
+    <result column="device_status" property="deviceStatus" />
+    <result column="model_id" property="modelId" />
+    <result column="project_id" property="projectId" />
+    <result column="device_description" property="deviceInfo" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM device ORDER BY update_time DESC LIMIT 20
+  </select>
+
+  <select id="selectByProjectId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE project_id = #{projectId} ORDER BY update_time DESC LIMIT 20
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE id = #{id}
+  </select>
+
+  <select id="selectByModelId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE model_id = #{modelId} ORDER BY update_time DESC LIMIT 20
+  </select>
+
+  <select id="selectByModelIdAndProjectId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE model_id = #{modelId} AND project_id = #{projectId} ORDER BY update_time DESC LIMIT 20
+  </select>
+
+  <select id="selectByDeviceCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE device_code = #{deviceCode}
+  </select>
+
+  <select id="selectByKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE device_name LIKE CONCAT('%', #{keyword}, '%')
+  </select>
+
+  <select id="selectByKeywordAndProjectId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE device_name LIKE CONCAT('%', #{keyword}, '%') AND project_id = #{projectId} ORDER BY update_time DESC
+  </select>
+
+  <select id="selectByModelIdAndKeyword" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE model_id = #{modelId} AND device_name LIKE CONCAT('%', #{keyword}, '%') ORDER BY update_time DESC
+  </select>
+
+  <select id="selectByConditions" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM device WHERE 1=1
+    <if test="deviceType != null and deviceType != ''">
+      AND device_type = #{deviceType}
+    </if>
+    <if test="deviceCode != null and deviceCode != ''">
+      AND device_code LIKE CONCAT('%', #{deviceCode}, '%')
+    </if>
+    <if test="deviceName != null and deviceName != ''">
+      AND device_name LIKE CONCAT('%', #{deviceName}, '%')
+    </if>
+    <if test="deviceStatus != null and deviceStatus != ''">
+      AND device_status = #{deviceStatus}
+    </if>
+    <if test="projectId != null">
+      AND project_id = #{projectId}
+    </if>
+    ORDER BY update_time DESC
+  </select>
+
+  <insert id="insert" parameterType="com.device.manage.entity.Device">
+    INSERT INTO device (
+      device_name, device_code, device_model, device_type, device_status,
+      model_id, project_id, device_description, create_time, update_time
+    ) VALUES (
+      #{deviceName}, #{deviceCode}, #{deviceType}, #{deviceType}, #{deviceStatus},
+      #{modelId}, #{projectId}, #{deviceInfo}, NOW(), NOW()
+    )
+  </insert>
+
+  <update id="update" parameterType="com.device.manage.entity.Device">
+    UPDATE device SET
+      device_name = #{deviceName},
+      device_code = #{deviceCode},
+      device_model = #{deviceType},
+      device_type = #{deviceType},
+      device_status = #{deviceStatus},
+      model_id = #{modelId},
+      project_id = #{projectId},
+      device_description = #{deviceInfo},
+      update_time = NOW()
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    DELETE FROM device WHERE id = #{id}
+  </delete>
+</mapper>

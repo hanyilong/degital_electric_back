@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.device.manage.mapper.GraphMapper">
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.Graph">
+    <id column="id" property="id" />
+    <result column="graphId" property="graphId" />
+    <result column="name" property="name" />
+    <result column="bgColor" property="bgColor" />
+    <result column="bgImage" property="bgImage" />
+    <result column="data" property="data" />
+    <result column="nodeConfigs" property="nodeConfigs" />
+    <result column="width" property="width" />
+    <result column="height" property="height" />
+    <result column="router" property="router" />
+    <result column="projectId" property="projectId" />
+
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT * FROM graph
+    <where>
+      <if test="projectId != null">
+        AND project_id = #{projectId}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectByProjectIdAndName" resultMap="BaseResultMap">
+    SELECT * FROM graph
+    WHERE project_id = #{projectId}
+      AND name LIKE CONCAT('%', #{name}, '%')
+  </select>
+
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT * FROM graph WHERE id = #{id}
+  </select>
+
+  <insert id="insert" parameterType="com.device.manage.entity.Graph">
+    INSERT INTO graph (
+      name, bgColor, bgImage, data, nodeConfigs, width, height, router, project_id
+    ) VALUES (
+      #{name}, #{bgColor}, #{bgImage}, #{data}, #{nodeConfigs}, #{width}, #{height}, #{router},  #{projectId}
+    )
+  </insert>
+
+  <update id="update" parameterType="com.device.manage.entity.Graph">
+    UPDATE graph SET
+      name = #{name},
+      bgColor = #{bgColor},
+      bgImage = #{bgImage},
+      data = #{data},
+      nodeConfigs = #{nodeConfigs},
+      width = #{width},
+      height = #{height},
+      router = #{router},
+      project_id = #{projectId}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Long">
+    DELETE FROM graph WHERE id = #{id}
+  </delete>
+</mapper>
