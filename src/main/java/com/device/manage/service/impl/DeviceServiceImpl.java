@@ -1,6 +1,7 @@
 package com.device.manage.service.impl;
 
 import com.device.manage.entity.Device;
+import com.device.manage.entity.DeviceStatic;
 import com.device.manage.mapper.DeviceMapper;
 import com.device.manage.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +61,18 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public boolean deleteById(Long id) {
         return deviceMapper.deleteById(id) > 0;
+    }
+
+    @Override
+    public DeviceStatic getDeviceStatic(String projectId) {
+        java.util.Map<String, Object> params = new java.util.HashMap<>();
+        params.put("projectId", projectId);
+        return deviceMapper.selectDeviceStatic(params);
+    }
+
+    @Override
+    public void updateDeviceOfflineStatus(List<String> onlineDeviceCodes) {
+        deviceMapper.updateDeviceStatusOffline(onlineDeviceCodes);
     }
 
     @Override

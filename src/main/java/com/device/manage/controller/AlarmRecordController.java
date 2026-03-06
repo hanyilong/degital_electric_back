@@ -1,6 +1,8 @@
 package com.device.manage.controller;
 
 import com.device.manage.entity.AlarmRecord;
+import com.device.manage.entity.AlarmStaticByDescription;
+import com.device.manage.entity.AlarmStaticByHour;
 import com.device.manage.service.AlarmRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,16 @@ public class AlarmRecordController {
     @GetMapping("/{id}")
     public AlarmRecord getAlarmRecordById(@PathVariable Long id) {
         return alarmRecordService.findById(id);
+    }
+
+    @GetMapping("/staticByDescription")
+    public List<AlarmStaticByDescription> getAlarmStaticByDescription(@RequestParam(required = false) Long projectId) {
+        return alarmRecordService.findAlarmStaticByDescription(projectId);
+    }
+
+    @GetMapping("/staticByHour")
+    public List<AlarmStaticByHour> getAlarmStaticByHour(@RequestParam(required = false) Long projectId) {
+        return alarmRecordService.findAlarmStaticByHour(projectId);
     }
 
     @GetMapping("/device/{deviceId}")

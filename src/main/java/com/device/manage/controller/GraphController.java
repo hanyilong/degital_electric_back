@@ -81,13 +81,13 @@ public class GraphController {
 
             // 8. 组装返回结果，预览地址
             String previewUrl = "http://localhost:8081/api/image/preview?filename=" + fileName;
-            result.put("code", 200);
+            result.put("success", true);
             result.put("msg", "success");
             result.put("data", previewUrl);
 
         } catch (IOException e) {
             // 异常兜底：文件保存失败时的返回
-            result.put("code", 500);
+            result.put("success", false);
             result.put("msg", "file upload failed: " + e.getMessage());
             result.put("data", "");
             e.printStackTrace();

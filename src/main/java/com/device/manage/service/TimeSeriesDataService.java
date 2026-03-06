@@ -61,4 +61,13 @@ public interface TimeSeriesDataService {
      * @return 查询结果
      */
     List<Map<String, Object>> sqlQuery(String sql);
+
+    List<String> findOfflineDeviceCodes();
+
+    /**
+     * 批量保存时序数据
+     * @param timeSeriesDataList 时序数据列表
+     * @return 保存结果
+     */
+    boolean batchSaveTimeSeriesData(List<TimeSeriesData> timeSeriesDataList);
 }

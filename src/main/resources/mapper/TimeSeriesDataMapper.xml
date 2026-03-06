@@ -51,9 +51,22 @@
         WHERE device_code = #{deviceCode}
         ORDER BY point_name
     </select>
-    
+
     <select id="sqlQuery" resultType="java.util.Map">
         ${sql}
     </select>
 
+    <select id="selectOnLineDeviceCodes" resultType="java.util.List">
+        SELECT DISTINCT tsd.device_code
+        FROM time_series_data tsd
+        WHERE tsd.create_time > DATE_SUB(NOW(), INTERVAL 24 HOUR);
+    </select>
+
+    <update id="update" parameterType="com.device.manage.entity.TimeSeriesData">
+        UPDATE time_series_data SET
+            point_value = #{pointValue},
+            recore_time = #{recordTime},
+            create_time = #{createTime},
+        WHERE device_code = #{deviceCode} and point_name = #{pointName}
+    </update>
 </mapper>

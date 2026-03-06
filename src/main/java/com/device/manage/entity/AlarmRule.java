@@ -9,6 +9,7 @@ public class AlarmRule {
     private String deviceCode;
     private Long projectId;
     private String pointName;
+    private String pointDescription;
     private String alarmType;
     private String alarmCondition;
     // conditionType 作为 alarmCondition 的别名，用于兼容旧参数
@@ -97,6 +98,18 @@ public class AlarmRule {
 
     public String getConditionType() {
         return alarmCondition;
+    }
+
+    public void setDeviceCode(String deviceCode) {
+        this.deviceCode = deviceCode;
+    }
+
+    public String getPointDescription() {
+        return pointDescription;
+    }
+
+    public void setPointDescription(String pointDescription) {
+        this.pointDescription = pointDescription;
     }
 
     public void setConditionType(String conditionType) {

@@ -187,3 +187,18 @@ npm start
 cd backend
 mvn spring-boot:run -Dspring-boot.run.jvmArguments="--add-opens=java.base/java.nio=org.apache.arrow.memory.core,ALL-UNNAMED"
 ```
+
+## mqtt数据上报
+topic:
+
+
+data:
+{
+   "deviceCode": "1007",
+   "timestamp": 1767498923,
+   "data": {
+      "temperature": 412.3,
+      "humidity": 112.31,
+      "pressure": 335.32
+   }
+}

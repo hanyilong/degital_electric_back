@@ -15,6 +15,13 @@
     <result column="update_time" property="updateTime" />
   </resultMap>
 
+  <resultMap id="StaticResultMap" type="com.device.manage.entity.DeviceStatic">
+    <result column="totalCount" property="totalCount"/>
+    <result column="onlineCount" property="onlineCount"/>
+    <result column="offlineCount" property="offlineCount"/>
+    <result column="repairingCount" property="repairingCount"/>
+  </resultMap>
+
   <select id="selectAll" resultMap="BaseResultMap">
     SELECT * FROM device ORDER BY update_time DESC LIMIT 20
   </select>
@@ -49,6 +56,16 @@
 
   <select id="selectByModelIdAndKeyword" parameterType="map" resultMap="BaseResultMap">
     SELECT * FROM device WHERE model_id = #{modelId} AND device_name LIKE CONCAT('%', #{keyword}, '%') ORDER BY update_time DESC
+  </select>
+
+  <select id="selectDeviceStatic" parameterType="map" resultMap="StaticResultMap">
+    SELECT
+      COUNT(1) AS totalCount,
+      COUNT(IF(device_status = 'online', 1, NULL)) AS onlineCount,
+      COUNT(IF(device_status = 'offline', 1, NULL)) AS offlineCount,
+      COUNT(IF(device_status = 'repairing', 1, NULL)) AS repairingCount
+    FROM device
+    WHERE project_id = #{projectId}
   </select>
 
   <select id="selectByConditions" parameterType="map" resultMap="BaseResultMap">
@@ -93,6 +110,17 @@
       device_description = #{deviceInfo},
       update_time = NOW()
     WHERE id = #{id}
+  </update>
+  <update id="updateDeviceStatusOffline" parameterType="java.util.List">
+    <if test="list != null and list.size() > 0">
+      UPDATE device
+      SET device_status = 'offline'
+      WHERE device_code NOT IN
+      <foreach collection="list" item="deviceCode" open="(" separator="," close=")">
+        #{deviceCode}
+      </foreach>
+      AND device_status != 'repairing'
+    </if>
   </update>
 
   <delete id="deleteById" parameterType="java.lang.Long">

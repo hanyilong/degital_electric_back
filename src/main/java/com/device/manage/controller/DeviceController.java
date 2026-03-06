@@ -1,6 +1,7 @@
 package com.device.manage.controller;
 
 import com.device.manage.entity.Device;
+import com.device.manage.entity.DeviceStatic;
 import com.device.manage.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,11 @@ public class DeviceController {
     @GetMapping("/{id}")
     public Device getDeviceById(@PathVariable Long id) {
         return deviceService.findById(id);
+    }
+
+    @GetMapping("/static")
+    public DeviceStatic getDeviceStatic(@RequestParam(required = false) String projectId) {
+        return deviceService.getDeviceStatic(projectId);
     }
 
     @GetMapping("/model/{modelId}")

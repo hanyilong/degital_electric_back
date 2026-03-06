@@ -1,8 +1,10 @@
 package com.device.manage.mapper;
 
 import com.device.manage.entity.Device;
+import com.device.manage.entity.DeviceStatic;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DeviceMapper {
@@ -19,4 +21,7 @@ public interface DeviceMapper {
     int insert(Device device);
     int update(Device device);
     int deleteById(Long id);
+    DeviceStatic selectDeviceStatic(Map<String, Object> params);
+
+    void updateDeviceStatusOffline(List<String> onlineDeviceCodes);
 }

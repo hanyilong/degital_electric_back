@@ -1,4 +1,4 @@
-package com.device.manage;
+package com.device.manage.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;

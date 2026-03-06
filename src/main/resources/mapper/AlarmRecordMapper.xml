@@ -16,6 +16,14 @@
     <result column="create_time" property="createTime"/>
     <result column="update_time" property="updateTime"/>
   </resultMap>
+  <resultMap id="HourStaticResultMap" type="com.device.manage.entity.AlarmStaticByHour">
+    <result column="hour" property="hour"></result>
+    <result column="count" property="count"></result>
+  </resultMap>
+  <resultMap id="DescriptionStaticResultMap" type="com.device.manage.entity.AlarmStaticByDescription">
+    <result column="description" property="description"></result>
+    <result column="count" property="count"></result>
+  </resultMap>
   <select id="selectAll" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record]]></select>
   <select id="selectById" parameterType="long" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE id = #{id}]]></select>
   <select id="selectBydeviceCode" parameterType="string" resultMap="BaseResultMap"><![CDATA[SELECT * FROM alarm_record WHERE device_code = #{deviceCode}]]></select>
@@ -53,6 +61,59 @@
     </if>
     <![CDATA[ ORDER BY a.alarm_time DESC]]>
   </select>
+  <select id="selectAlarmStaticByHour" parameterType="long" resultMap="HourStaticResultMap"><![CDATA[
+    SELECT
+      time_slot AS `hour`,
+      IFNULL(alarm_count, 0) AS `count`
+    FROM
+      (
+        SELECT '00:00' AS time_slot UNION ALL
+        SELECT '01:00' AS time_slot UNION ALL
+        SELECT '02:00' AS time_slot UNION ALL
+        SELECT '03:00' AS time_slot UNION ALL
+        SELECT '04:00' AS time_slot UNION ALL
+        SELECT '05:00' AS time_slot UNION ALL
+        SELECT '06:00' AS time_slot UNION ALL
+        SELECT '07:00' AS time_slot UNION ALL
+        SELECT '08:00' AS time_slot UNION ALL
+        SELECT '09:00' AS time_slot UNION ALL
+        SELECT '10:00' AS time_slot UNION ALL
+        SELECT '11:00' AS time_slot UNION ALL
+        SELECT '12:00' AS time_slot UNION ALL
+        SELECT '13:00' AS time_slot UNION ALL
+        SELECT '14:00' AS time_slot UNION ALL
+        SELECT '15:00' AS time_slot UNION ALL
+        SELECT '16:00' AS time_slot UNION ALL
+        SELECT '17:00' AS time_slot UNION ALL
+        SELECT '18:00' AS time_slot UNION ALL
+        SELECT '19:00' AS time_slot UNION ALL
+        SELECT '20:00' AS time_slot UNION ALL
+        SELECT '21:00' AS time_slot UNION ALL
+        SELECT '22:00' AS time_slot UNION ALL
+        SELECT '23:00' AS time_slot
+      ) AS time_list
+        LEFT JOIN
+      (
+        SELECT
+          DATE_FORMAT(DATE_ADD(DATE_FORMAT(create_time, '%Y-%m-%d %H:00:00'), INTERVAL -(MINUTE(create_time) + (HOUR(create_time) % 2)*60) MINUTE), '%H:00') AS slot_time,
+          COUNT(id) AS alarm_count
+        FROM
+          alarm_record ar
+        WHERE
+          project_id = #{projectId} AND
+          DATE(create_time) = CURDATE()
+    GROUP BY
+      slot_time
+      ) AS alarm_data ON time_list.time_slot = alarm_data.slot_time
+    ORDER BY
+      time_list.time_slot;
+    ]]></select>
+  <select id="selectAlarmStaticByDescription" parameterType="long" resultMap="DescriptionStaticResultMap"><![CDATA[
+    select ar2.point_description as description, count(1) as count
+    from alarm_record ar left join alarm_rule ar2 on ar.alarm_rule_id = ar2.id
+    where ar.project_id = #{projectId}
+    group by ar2.point_description
+    ]]></select>
   <insert id="insert" parameterType="com.device.manage.entity.AlarmRecord"><![CDATA[INSERT INTO alarm_record (alarm_rule_id, device_code, project_id, alarm_time, alarm_level, alarm_message, alarm_value, status, resolve_time, create_time, update_time) VALUES (#{ruleId}, #{deviceCode}, #{projectId}, #{alarmTime}, #{alarmLevel}, #{alarmMessage}, #{alarmValue}, #{status}, #{resolveTime}, NOW(),  NOW())]]></insert>
   <update id="updateStatus"><![CDATA[UPDATE alarm_record SET status = #{status}, resolve_time = #{resolveTime} WHERE id = #{id}]]></update>
   <delete id="deleteById" parameterType="long"><![CDATA[DELETE FROM alarm_record WHERE id = #{id}]]></delete>

@@ -84,8 +84,8 @@ public class AlarmRuleController {
     }
 
     @PutMapping("/{id}/status")
-    public boolean updateAlarmRuleStatus(@PathVariable Long id, @RequestBody Boolean isActive) {
-        return alarmRuleService.updateStatus(id, isActive);
+    public boolean updateAlarmRuleStatus(@PathVariable Long id, @RequestBody AlarmRule alarmRule) {
+        return alarmRuleService.updateStatus(id, alarmRule.getIsActive());
     }
 
     @DeleteMapping("/{id}")

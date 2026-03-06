@@ -1,6 +1,9 @@
 package com.device.manage.service;
 
 import com.device.manage.entity.AlarmRecord;
+import com.device.manage.entity.AlarmStaticByDescription;
+import com.device.manage.entity.AlarmStaticByHour;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +21,15 @@ public interface AlarmRecordService {
     boolean save(AlarmRecord alarmRecord);
     boolean updateStatus(Long id, String status, String resolveTime);
     boolean deleteById(Long id);
+
+    List<AlarmStaticByHour> findAlarmStaticByHour(Long projectId);
+
+    List<AlarmStaticByDescription> findAlarmStaticByDescription(Long projectId);
+
+    /**
+     * 批量保存告警记录
+     * @param alarmRecordList 告警记录列表
+     * @return 保存结果
+     */
+    boolean batchSaveAlarmRecords(List<AlarmRecord> alarmRecordList);
 }

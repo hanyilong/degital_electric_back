@@ -1,6 +1,8 @@
 package com.device.manage.mapper;
 
 import com.device.manage.entity.AlarmRecord;
+import com.device.manage.entity.AlarmStaticByDescription;
+import com.device.manage.entity.AlarmStaticByHour;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -21,4 +23,8 @@ public interface  AlarmRecordMapper {
     int insert(AlarmRecord alarmRecord);
     int updateStatus(@Param("id") Long id, @Param("status") String status, @Param("resolveTime") String resolveTime);
     int deleteById(Long id);
+
+    List<AlarmStaticByDescription> selectAlarmStaticByDescription(Long projectId);
+
+    List<AlarmStaticByHour> selectAlarmStaticByHour(Long projectId);
 }

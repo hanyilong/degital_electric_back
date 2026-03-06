@@ -71,4 +71,8 @@ public interface TimeSeriesDataMapper {
      * @return 查询结果
      */
     List<Map<String, Object>> sqlQuery(@Param("sql") String sql);
+
+    void updateToNewValue(TimeSeriesData timeSeriesData);
+
+    List<String> selectOnLineDeviceCodes();
 }
