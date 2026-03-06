@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.device.manage.mapper.CabinetRoomMapper" >
+  <resultMap id="BaseResultMap" type="com.device.manage.entity.CabinetRoom" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="rows" property="rows" jdbcType="JSON" />
+  </resultMap>
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    SELECT id, name, rows FROM cabinet_room
+  </select>
+
+  <select id="selectById" resultMap="BaseResultMap" >
+    SELECT id, name, rows FROM cabinet_room WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insert" parameterType="com.device.manage.entity.CabinetRoom" >
+    INSERT INTO cabinet_room (name, rows)
+    VALUES (#{name,jdbcType=VARCHAR}, #{rows,jdbcType=JSON})
+  </insert>
+
+  <update id="update" parameterType="com.device.manage.entity.CabinetRoom" >
+    UPDATE cabinet_room
+    SET name = #{name,jdbcType=VARCHAR},
+        rows = #{rows,jdbcType=JSON}
+    WHERE id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    DELETE FROM cabinet_room WHERE id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>
